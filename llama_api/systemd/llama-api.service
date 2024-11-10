@@ -1,0 +1,34 @@
+[Unit]
+Description=Cliffhanger LLM API Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=YOUR_USERNAME  # Replace with your actual username
+Group=YOUR_GROUP    # Replace with your actual group
+
+# Path to the virtual environment and application
+Environment="PATH=/opt/llama_api/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+Environment="PYTHONPATH=/opt/llama_api"
+WorkingDirectory=/opt/llama_api
+
+# The actual command to start the service
+ExecStart=/opt/llama_api/venv/bin/python -m app.api
+
+# Restart configuration
+Restart=always
+RestartSec=1
+
+# Output logging
+StandardOutput=append:/var/log/llama-api/access.log
+StandardError=append:/var/log/llama-api/error.log
+
+# Resource limits
+LimitNOFILE=65536
+# Memory limit (adjust based on your model's requirements and system resources)
+LimitAS=infinity
+LimitNPROC=64
+
+[Install]
+WantedBy=multi-user.target
